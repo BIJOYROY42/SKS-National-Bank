@@ -13,11 +13,10 @@ Drop Table Address if exists;
 
 
 CREATE TABLE Facilities(
-	Facility_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
 	Is_Branch BIT NOT NULL, --Can store 0 or 1 acts as BOOL
-	Facility_Name VARCHAR(75) UNIQUE
-	FOREIGN KEY (Address_ID) REFERENCES Address(address_ID)
+	Facility_Name VARCHAR(75) UNIQUE,
+	FOREIGN KEY (Address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Address(
@@ -34,18 +33,16 @@ CREATE TABLE Customers(
 	Address_ID INT NOT NULL,
 	First_Name VARCHAR(50) NOT NULL,
 	Last_Name VARCHAR(100) NOT NULL,
-	FOREIGN KEY (address_ID) REFERENCES Address(address_ID)
+	FOREIGN KEY (address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Bank_Employees(
-	Employee_ID INT IDENTITY PRIMARY KEY,
 	Employee_Address_ID INT NOT NULL,
 	Role VARCHAR(150)NOT NULL,
 	Manager_ID INT NOT NULL,
 	Start_Date DATE NOT NULL,
 	Employee_First_Name VARCHAR(70),
 	Employee_Last_Name VARCHAR(70),
-	Employees_Work_AddressesWork_Address_ID INT NOT NULL,
-	FOREIGN KEY (Employees_Work_AddressesWork_Address_ID) REFERENCES Address(Address_ID),
-	FOREIGN KEY (Employee_Address_ID) REFERENCES Address(Address_ID)
-);
+	Employees_Work_AddressesWork_Address_ID INT NOT NULL,);
+	FOREIGN KEY (Employees_Work_AddressesWork_Address_ID) REFERENCES Address(Address_ID) ON DELETE CASCADE,
+	FOREIGN KEY (Employee_Address_ID) REFERENCES Address(Address_ID) ON DELETE CASCADE
