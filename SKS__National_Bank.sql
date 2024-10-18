@@ -1,3 +1,10 @@
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'SKS_National_Bank')
+BEGIN
+	DROP DATABASE SKS_National_Bank
+END
+
+USE master
+GO
 CREATE DATABASE SKS_National_Bank
 GO
 USE SKS_National_Bank
@@ -13,6 +20,7 @@ Drop Table Address if exists;
 
 
 CREATE TABLE Facilities(
+	Facility_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
 	Is_Branch BIT NOT NULL, --Can store 0 or 1 acts as BOOL
 	Facility_Name VARCHAR(75) UNIQUE,
@@ -25,7 +33,7 @@ CREATE TABLE Address(
 	Province_Name VARCHAR(60) NOT NULL,
 	Street_Number int NOT NULL,
 	Street_Name VARCHAR(60) NOT NULL,
-	Appt_Number VARCHAR(10) NOT NULL,
+	Appt_Number VARCHAR(10),
 );
 
 CREATE TABLE Customers(
