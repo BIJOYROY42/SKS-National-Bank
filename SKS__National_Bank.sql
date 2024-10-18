@@ -3,6 +3,15 @@ GO
 USE SKS_National_Bank
 GO
 
+Drop Table Bank_Employees if exists;
+
+Drop Table Customers if exists;
+
+Drop Table Facilities if exists;
+
+Drop Table Address if exists;
+
+
 CREATE TABLE Facilities(
 	Facility_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
@@ -35,14 +44,8 @@ CREATE TABLE Bank_Employees(
 	Manager_ID INT NOT NULL,
 	Start_Date DATE NOT NULL,
 	Employee_First_Name VARCHAR(70),
-	Employee_Last_Name VARCHAR(70)
+	Employee_Last_Name VARCHAR(70),
+	Employees_Work_AddressesWork_Address_ID INT NOT NULL,
+	FOREIGN KEY (Employees_Work_AddressesWork_Address_ID) REFERENCES Address(Address_ID),
 	FOREIGN KEY (Employee_Address_ID) REFERENCES Address(Address_ID)
-);
-
-CREATE TABLE Employees_Work_Addresses(
-	Employee_ID INT,
-	Address_ID iNT,
-	PRIMARY KEY(Employee_ID, Address_ID),
-	FOREIGN KEY (Employee_ID) REFERENCES Bank_Employees(Employee_ID),
-	FOREIGN KEY (Address_ID) REFERENCES Address(Address_ID)
 );
