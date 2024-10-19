@@ -23,14 +23,13 @@ IF OBJECT_ID('Facilities', 'U') IS NOT NULL DROP TABLE Facilities;
 
 IF OBJECT_ID('Address', 'U') IS NOT NULL DROP TABLE Address;
 
+IF OBJECT_ID('Transfers', 'U') IS NOT NULL DROP TABLE Transfers;
+
 IF OBJECT_ID('Customers_Accounts', 'U') IS NOT NULL DROP TABLE Customers_Accounts;
 
 IF OBJECT_ID('Account_Types', 'U') IS NOT NULL DROP TABLE Account_Types;
 
 IF OBJECT_ID('Accounts', 'U') IS NOT NULL DROP TABLE Accounts;
-
-
-
 
 CREATE TABLE Address
 (
@@ -108,5 +107,14 @@ CREATE TABLE Employees_Accounts
 	Employee_ID INT NOT NULL,
 	Account_ID INT NOT NULL,
 	FOREIGN KEY (Employee_ID) REFERENCES Bank_Employees(Employee_ID) ON DELETE NO ACTION,
+	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
+);
+
+CREATE TABLE Transfers
+(
+	Transfer_ID INT IDENTITY PRIMARY KEY,
+	Account_ID INT NOT NULL,
+	Amount money NOT NULL,
+	Transfer_Date DATE NOT NULL,
 	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
 );
