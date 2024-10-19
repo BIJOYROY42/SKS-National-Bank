@@ -9,7 +9,7 @@
 # Description
 This project is to simulate being a database administrator setting up and serving a customer's business needs of a database in two phases. 
 
-# Pahse 1
+# Phase 1
 ## Requierments
 - ERD diagram with specifics about the project that matches the final schema
 - Script to create database and tables
