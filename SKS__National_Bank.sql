@@ -2,7 +2,9 @@
 USE master
 GO
 
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'SKS_National_Bank')
+IF EXISTS (SELECT name
+FROM sys.databases
+WHERE name = 'SKS_National_Bank')
 BEGIN
 	DROP DATABASE SKS_National_Bank
 END
@@ -21,12 +23,17 @@ IF OBJECT_ID('Facilities', 'U') IS NOT NULL DROP TABLE Facilities;
 
 IF OBJECT_ID('Address', 'U') IS NOT NULL DROP TABLE Address;
 
+IF OBJECT_ID('Customers_Accounts', 'U') IS NOT NULL DROP TABLE Customers_Accounts;
+
 IF OBJECT_ID('Account_Types', 'U') IS NOT NULL DROP TABLE Account_Types;
 
 IF OBJECT_ID('Accounts', 'U') IS NOT NULL DROP TABLE Accounts;
 
 
-CREATE TABLE Address(
+
+
+CREATE TABLE Address
+(
 	address_ID INT IDENTITY PRIMARY KEY,
 	City_Name VARCHAR(60) NOT NULL,
 	Province_Name VARCHAR(60) NOT NULL,
@@ -35,15 +42,18 @@ CREATE TABLE Address(
 	Appt_Number VARCHAR(10)
 );
 
-CREATE TABLE Facilities(
+CREATE TABLE Facilities
+(
 	Facility_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
-	Is_Branch BIT NOT NULL, --Can store 0 or 1 acts as BOOL
+	Is_Branch BIT NOT NULL,
+	--Can store 0 or 1 acts as BOOL
 	Facility_Name VARCHAR(75) UNIQUE,
 	FOREIGN KEY (Address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
 
-CREATE TABLE Customers(
+CREATE TABLE Customers
+(
 	Customer_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
 	First_Name VARCHAR(50) NOT NULL,
@@ -51,7 +61,9 @@ CREATE TABLE Customers(
 	FOREIGN KEY (address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
 
-CREATE TABLE Bank_Employees(
+CREATE TABLE Bank_Employees
+(
+	Employee_ID INT IDENTITY PRIMARY KEY,
 	Employee_Address_ID INT NOT NULL,
 	Role VARCHAR(150)NOT NULL,
 	Manager_ID INT NOT NULL,
@@ -63,12 +75,14 @@ CREATE TABLE Bank_Employees(
 	FOREIGN KEY (Employee_Address_ID) REFERENCES Address(Address_ID) ON DELETE CASCADE
 );
 
-CREATE TABLE Account_Types(
+CREATE TABLE Account_Types
+(
 	Account_Type_ID INT IDENTITY PRIMARY KEY,
-	Account_Type_Name VARCHAR(50) NOT NULL	
+	Account_Type_Name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Accounts(
+CREATE TABLE Accounts
+(
 	Account_ID INT IDENTITY PRIMARY KEY,
 	Account_Type_ID INT NOT NULL,
 	Facility_ID INT NOT NULL,
@@ -78,4 +92,21 @@ CREATE TABLE Accounts(
 	Interest_rate DECIMAL(5,2),
 	FOREIGN KEY (Account_Type_ID) REFERENCES Account_Types(Account_Type_ID) ON DELETE CASCADE,
 	FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE Customers_Accounts
+(
+	Customer_ID INT NOT NULL,
+	Account_ID INT NOT NULL,
+	FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID) ON DELETE NO ACTION,
+	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
+	PRIMARY KEY (Customer_ID, Account_ID)
+);
+
+CREATE TABLE Employees_Accounts
+(
+	Employee_ID INT NOT NULL,
+	Account_ID INT NOT NULL,
+	FOREIGN KEY (Employee_ID) REFERENCES Bank_Employees(Employee_ID) ON DELETE NO ACTION,
+	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
 );
