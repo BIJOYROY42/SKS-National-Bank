@@ -227,3 +227,12 @@ VALUES
     (8, 750.75, '2024-10-07'), 
     (12, 2500.00, '2024-10-10'),
     (15, 1800.00, '2024-10-12')
+
+-- Select * from Address;
+-- Select * from Facilities;
+-- Select * from Customers;
+-- Select * from Bank_Employees;
+-- Select * from Account_Types;
+-- Select * from Accounts;
+-- Select * from Customers_Accounts;
+-- Select * from Transfers;
