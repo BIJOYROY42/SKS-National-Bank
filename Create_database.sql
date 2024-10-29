@@ -16,7 +16,7 @@ GO
 
 CREATE TABLE Address
 (
-	address_ID INT IDENTITY PRIMARY KEY,
+	Address_ID INT IDENTITY PRIMARY KEY,
 	City_Name VARCHAR(60) NOT NULL,
 	Province_Name VARCHAR(60) NOT NULL,
 	Street_Number int NOT NULL,
@@ -92,6 +92,7 @@ CREATE TABLE Employees_Accounts
 	Account_ID INT NOT NULL,
 	FOREIGN KEY (Employee_ID) REFERENCES Bank_Employees(Employee_ID) ON DELETE NO ACTION,
 	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
+	PRIMARY KEY (Employee_ID, Account_ID)
 );
 
 CREATE TABLE Transfers
