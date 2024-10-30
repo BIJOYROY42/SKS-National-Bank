@@ -7,7 +7,7 @@ WHERE name = 'SKS_National_Bank')
 BEGIN
 	DROP DATABASE SKS_National_Bank
 END
-GO 
+GO
 
 -- The Above wont run with out logging out and back in if you are connected to the db
 CREATE DATABASE SKS_National_Bank
@@ -31,7 +31,7 @@ CREATE TABLE Facilities
 	Facility_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
 	Is_Branch BIT NOT NULL,
-	--Can store 0 or 1 acts as BOOL
+	--Can store 0 or 1 acts as BOOLe
 	Facility_Name VARCHAR(75) UNIQUE,
 	FOREIGN KEY (Address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
@@ -51,7 +51,10 @@ CREATE TABLE Bank_Employees
 	Employee_ID INT IDENTITY PRIMARY KEY,
 	Employee_Address_ID INT NOT NULL,
 	Role VARCHAR(150)NOT NULL,
-	Manager_ID INT NOT NULL,
+	-- The Manager_ID column is an integer that cannot be null.
+	-- It references the ID of the manager from the same table,
+	-- indicating the employee's manager.
+	Manager_ID INT,
 	Start_Date DATE NOT NULL,
 	Employee_First_Name VARCHAR(70),
 	Employee_Last_Name VARCHAR(70),	
@@ -108,5 +111,5 @@ CREATE TABLE Transfers
 	Account_ID INT NOT NULL,
 	Amount money NOT NULL,
 	Transfer_Date DATE NOT NULL,
-	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
+	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE
 );

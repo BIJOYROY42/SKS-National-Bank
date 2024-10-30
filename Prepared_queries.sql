@@ -24,42 +24,34 @@ BEGIN
 END
 GO
 
-----
-
-SELECT TOP 3
-        Accounts.Account_ID, Account_Types.Account_Type_Name, Accounts.Balance
-    FROM 
-        dbo.Accounts
-	INNER JOIN
-		dbo.Account_Types ON Accounts.Account_Type_ID = Account_Types.Account_Type_ID 
-    WHERE 
-        Account_Types.Account_Type_Name = 'Savings'
-    ORDER BY
-        Accounts.Balance DESC;
-select * from accounts
-
------ 
-
 -- 2 Retrieve all employees in a branch
 IF OBJECT_ID('dbo.Get_Employees', 'P') IS NOT NULL
 BEGIN
     DROP PROCEDURE dbo.Get_Employees
 END
 GO
-CREATE PROCEDURE Get_Employees (@BranchName AS NVARCHAR(40))
+CREATE PROCEDURE Get_Employees 
+    @BranchName NVARCHAR(75)  
 AS
 BEGIN
-	SELECT
-		be.Employee_ID, f.Facility_Name, be.Employee_First_Name, be.Employee_Last_Name, be.Role
-	FROM
-		dbo.Bank_Employees be
-	INNER JOIN
-		dbo.Facilities f ON be.Facility_ID = f.Facility_ID
-	WHERE
-		f.Facility_Name = @BranchName
-	ORDER BY
-		be.Employee_First_Name
+    SELECT 
+        be.Employee_ID, 
+        f.Facility_Name, 
+        be.Employee_First_Name, 
+        be.Employee_Last_Name, 
+        be.Role
+    FROM 
+        Bank_Employees be
+    INNER JOIN 
+        Facilities_Employees fe ON be.Employee_ID = fe.Employee_ID
+    INNER JOIN 
+        Facilities f ON fe.Facility_ID = f.Facility_ID
+    WHERE 
+        f.Facility_Name = @BranchName
+    ORDER BY 
+        be.Employee_First_Name;
 END
+GO
 
 -- 3 Add Transfer to Account of Customer
 IF OBJECT_ID('dbo.Transfer_Money', 'P') IS NOT NULL
@@ -75,6 +67,7 @@ BEGIN
 	VALUES (
 		 @Account_ID, @Transfer, @Transfer_Date)
 END
+GO 
 
 -- 4. Get Customer Account Summary
 -- Shows all accounts and their balances for a given customer
@@ -88,6 +81,18 @@ CREATE PROCEDURE Get_Customer_Summary
     @CustomerID INT
 AS
 BEGIN
+    IF @CustomerID IS NULL OR @CustomerID < 1
+    BEGIN
+        RAISERROR('Invalid Customer ID', 16, 1);
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM Customers WHERE Customer_ID = @CustomerID)
+    BEGIN
+        RAISERROR('Customer not found', 16, 1);
+        RETURN;
+    END
+
     SELECT 
         c.Customer_ID,
         c.First_Name + ' ' + c.Last_Name AS Customer_Name,
@@ -95,8 +100,8 @@ BEGIN
         a.Account_ID,
         a.Balance,
         a.Interest_rate,
-        f.Facility_Name as Branch_Name,
-        a.Data_Last_transaction as Last_Transaction_Date
+        f.Facility_Name AS Branch_Name,
+        a.Data_Last_transaction AS Last_Transaction_Date
     FROM Customers c
     INNER JOIN Customers_Accounts ca ON c.Customer_ID = ca.Customer_ID
     INNER JOIN Accounts a ON ca.Account_ID = a.Account_ID
@@ -123,16 +128,17 @@ BEGIN
     SELECT 
         f.Facility_Name,
         COUNT(DISTINCT ca.Customer_ID) as Total_Customers,
-        SUM(CASE WHEN at.Account_Type_Name = 'Savings' OR at.Account_Type_Name = 'Checking' 
+        SUM(CASE WHEN at.Account_Type_Name IN ('Savings', 'Checking') 
             THEN a.Balance ELSE 0 END) as Total_Deposits,
         SUM(CASE WHEN at.Account_Type_Name = 'Loan' 
             THEN a.Balance ELSE 0 END) as Total_Loans,
         COUNT(DISTINCT be.Employee_ID) as Total_Employees
     FROM Facilities f
-    LEFT JOIN Accounts a ON f.Facility_ID = a.Facility_ID
-    LEFT JOIN Account_Types at ON a.Account_Type_ID = at.Account_Type_ID
-    LEFT JOIN Customers_Accounts ca ON a.Account_ID = ca.Account_ID
-    LEFT JOIN Bank_Employees be ON f.Facility_ID = be.Facility_ID
+    INNER JOIN Facilities_Employees fe ON f.Facility_ID = fe.Facility_ID
+    INNER JOIN Bank_Employees be ON fe.Employee_ID = be.Employee_ID
+    INNER JOIN Accounts a ON f.Facility_ID = a.Facility_ID
+    INNER JOIN Account_Types at ON a.Account_Type_ID = at.Account_Type_ID
+    INNER JOIN Customers_Accounts ca ON a.Account_ID = ca.Account_ID
     WHERE f.Is_Branch = 1
     AND a.Data_Last_transaction BETWEEN @StartDate AND @EndDate
     GROUP BY f.Facility_Name
@@ -187,20 +193,22 @@ AS
 BEGIN
     SELECT 
         be.Employee_ID,
-        be.Employee_First_Name + ' ' + be.Employee_Last_Name as Employee_Name,
+        be.Employee_First_Name + ' ' + be.Employee_Last_Name AS Employee_Name,
         be.Role,
-        COUNT(DISTINCT ea.Account_ID) as Accounts_Managed,
-        SUM(a.Balance) as Total_Portfolio_Value,
-        COUNT(DISTINCT t.Transfer_ID) as Transactions_Handled
+        COUNT(DISTINCT ea.Account_ID) AS Accounts_Managed,
+        COALESCE(SUM(a.Balance), 0) AS Total_Portfolio_Value
     FROM Bank_Employees be
+    INNER JOIN Facilities_Employees fe ON be.Employee_ID = fe.Employee_ID
     LEFT JOIN Employees_Accounts ea ON be.Employee_ID = ea.Employee_ID
     LEFT JOIN Accounts a ON ea.Account_ID = a.Account_ID
-    LEFT JOIN Transfers t ON a.Account_ID = t.Account_ID
-    WHERE be.Facility_ID = @FacilityID
+    WHERE fe.Facility_ID = @FacilityID
     GROUP BY be.Employee_ID, be.Employee_First_Name, be.Employee_Last_Name, be.Role
+    HAVING COUNT(DISTINCT ea.Account_ID) > 0 OR COALESCE(SUM(a.Balance), 0) > 0
     ORDER BY Total_Portfolio_Value DESC;
 END
 GO
+
+select * from Employees_Accounts;
 
 -- 8. Account Activity Report
 -- Generates detailed activity report for an account
@@ -310,22 +318,22 @@ GO
 
 
 -- 1 
-EXEC Track_Loan 'loan'
+EXEC Track_Loan 'loan';
 -- 2 Get all employees in a branch
-EXEC Get_Employees 'office 4'
+EXEC Get_Employees 'office 1';
 -- 3 Transfer money to account 1
-EXEC Transfer_Money 1, 20000.00, '2024-10-24'
+EXEC Transfer_Money 1, 20000.00, '2024-10-24';
 -- 4 Get summary for customer ID 1
-EXEC Get_Customer_Summary 1
+EXEC Get_Customer_Summary 1;
 -- 5 Get branch performance for the last month
-EXEC Branch_Performance '2023-01-01', '2023-04-01'
+EXEC Branch_Performance '2023-01-01', '2023-04-01';
 -- 6 Monitor transactions above $10,000
-EXEC Monitor_Large_Transactions 10000.00, '2024-10-01', '2024-10-26'
--- 7 Monitor transactions above $10,000
-EXEC Monitor_Large_Transactions 10000.00, '2024-10-01', '2024-10-26'
+EXEC Monitor_Large_Transactions 10000.00, '2024-10-01', '2024-10-26';
+-- 7 Monitor employee performance
+EXEC Employee_Performance 1;
 -- 8 Get account activity for account 1
-EXEC Account_Activity_Report 1, '2024-10-01', '2024-10-26'
+EXEC Account_Activity_Report 1, '2024-10-01', '2024-10-26';
 -- 9 Find accounts inactive for 90 days
-EXEC Find_Inactive_Accounts 90
+EXEC Find_Inactive_Accounts 90;
 -- 10 Find customers with total balance above $50,000
-EXEC High_Value_Customer_Report 50000.00
+EXEC High_Value_Customer_Report 50000.00;
