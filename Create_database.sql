@@ -7,8 +7,9 @@ WHERE name = 'SKS_National_Bank')
 BEGIN
 	DROP DATABASE SKS_National_Bank
 END
+GO 
 
-
+-- The Above wont run with out logging out and back in if you are connected to the db
 CREATE DATABASE SKS_National_Bank
 GO
 USE SKS_National_Bank
@@ -44,18 +45,24 @@ CREATE TABLE Customers
 	FOREIGN KEY (address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
 
+
 CREATE TABLE Bank_Employees
 (
 	Employee_ID INT IDENTITY PRIMARY KEY,
-	Facility_ID INT NOT NULL,
 	Employee_Address_ID INT NOT NULL,
 	Role VARCHAR(150)NOT NULL,
 	Manager_ID INT NOT NULL,
 	Start_Date DATE NOT NULL,
 	Employee_First_Name VARCHAR(70),
-	Employee_Last_Name VARCHAR(70),
-	FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE NO ACTION,
+	Employee_Last_Name VARCHAR(70),	
 	FOREIGN KEY (Employee_Address_ID) REFERENCES Address(Address_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE Facilities_Employees
+(
+	Facility_ID INT NOT NULL,
+	Employee_ID INT NOT NULL,
+	FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Account_Types

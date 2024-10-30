@@ -24,6 +24,22 @@ BEGIN
 END
 GO
 
+----
+
+SELECT TOP 3
+        Accounts.Account_ID, Account_Types.Account_Type_Name, Accounts.Balance
+    FROM 
+        dbo.Accounts
+	INNER JOIN
+		dbo.Account_Types ON Accounts.Account_Type_ID = Account_Types.Account_Type_ID 
+    WHERE 
+        Account_Types.Account_Type_Name = 'Savings'
+    ORDER BY
+        Accounts.Balance DESC;
+select * from accounts
+
+----- 
+
 -- 2 Retrieve all employees in a branch
 IF OBJECT_ID('dbo.Get_Employees', 'P') IS NOT NULL
 BEGIN
@@ -293,7 +309,7 @@ END
 GO
 
 
--- 1 Ensure that all things must be dynamic and avoid hardcoding it
+-- 1 
 EXEC Track_Loan 'loan'
 -- 2 Get all employees in a branch
 EXEC Get_Employees 'office 4'
