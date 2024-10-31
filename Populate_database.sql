@@ -137,7 +137,7 @@ VALUES
 	(31, 'IT Support', 3, '2019-06-01', 'Fiona', 'Gallagher'),
 	(32, 'Accountant', 4, '2020-07-01', 'George', 'Michael'),
 	(33, 'HR', 4, '2021-08-01', 'Hannah', 'Montana'),
-	(34, 'Branch Manager', 5, '2017-09-01', 'Ian', 'Curtis'),
+	(34, 'Branch Manager', NULL, '2017-09-01', 'Ian', 'Curtis'),
 	(35, 'Assistant Manager', 5, '2018-10-01', 'Jack', 'Sparrow'),
 	(36, 'Teller', 6, '2019-11-01', 'Karen', 'Walker'),
 	(37, 'Loan Officer', 6, '2020-12-01', 'Leo', 'DiCaprio'),
@@ -151,7 +151,7 @@ VALUES
 	(45, 'IT Support', 3, '2021-08-01', 'Tony', 'Stark'),
 	(46, 'Accountant', 3, '2021-09-01', 'Uma', 'Thurman'),
 	(47, 'HR', 4, '2021-10-01', 'Victor', 'Frankenstein'),
-	(48, 'Branch Manager', 4, '2021-11-01', 'Wanda', 'Maximoff'),
+	(48, 'Branch Manager', NULL, '2021-11-01', 'Wanda', 'Maximoff'),
 	(49, 'Assistant Manager', 5, '2021-12-01', 'Xander', 'Cage'),
 	(50, 'Teller', 5, '2022-01-01', 'Yara', 'Greyjoy'),
 	(51, 'Loan Officer', 6, '2022-02-01', 'Zara', 'Larsson'),
@@ -160,8 +160,8 @@ VALUES
 	(54, 'IT Support', 7, '2022-05-01', 'Chris', 'Evans'),
 	(55, 'Accountant', 8, '2022-06-01', 'Daisy', 'Ridley'),
 	(56, 'HR', 8, '2022-07-01', 'Eddie', 'Redmayne'),
-	(57, 'Branch Manager', 9, '2022-08-01', 'Felicity', 'Jones'),
-	(58, 'Assistant Manager', 9, '2022-09-01', 'Gina', 'Rodriguez'),
+	(57, 'Branch Manager', NULL, '2022-08-01', 'Felicity', 'Jones'),
+	(58, 'Assistant Manager', 31, '2022-09-01', 'Gina', 'Rodriguez'),
 	(59, 'Teller', 10, '2022-10-01', 'Henry', 'Cavill'),
 	(60, 'Loan Officer', 10, '2022-11-01', 'Isla', 'Fisher'),
 	(61, 'Customer Service', 10, '2022-12-01', 'Jack', 'Black');
@@ -230,10 +230,10 @@ VALUES
 	(29, 2),
 	(30, 1),
 	(30, 3),
-	(31, 1),
+	(31, 6),
 	(31, 4),
 	(32, 1),
-	(32, 5),
+	(32, 6),
 	(33, 1),
 	(33, 2),
 	(34, 1),
@@ -241,7 +241,7 @@ VALUES
 	(35, 1),
 	(35, 4),
 	(36, 1),
-	(36, 5),
+	(36, 6),
 	(37, 1),
 	(37, 2),
 	(38, 1),
@@ -262,17 +262,17 @@ VALUES
 	(1, 2, 1500.00, '2023-02-01', 1002, 0.01),
 	(1, 3, 2000.00, '2023-03-01', 1003, 0.01),
 	(1, 4, 2500.00, '2023-04-01', 1004, 0.01),
-	(1, 5, 3000.00, '2023-05-01', 1005, 0.01),
+	(1, 4, 3000.00, '2023-05-01', 1005, 0.01),
 	(2, 1, 5000.00, '2023-01-01', NULL, 0.02),
 	(2, 2, 6000.00, '2023-02-01', NULL, 0.02),
 	(2, 3, 7000.00, '2023-03-01', NULL, 0.02),
 	(2, 4, 8000.00, '2023-04-01', NULL, 0.02),
-	(2, 5, 9000.00, '2023-05-01', NULL, 0.02),
+	(2, 4, 9000.00, '2023-05-01', NULL, 0.02),
 	(3, 1, 10000.00, '2023-01-01', NULL, 0.05),
 	(3, 2, 15000.00, '2023-02-01', NULL, 0.05),
 	(3, 3, 20000.00, '2023-03-01', NULL, 0.05),
 	(3, 4, 25000.00, '2023-04-01', NULL, 0.05),
-	(3, 5, 30000.00, '2023-05-01', NULL, 0.05);
+	(3, 4, 30000.00, '2023-05-01', NULL, 0.05);
 
 
 INSERT INTO Customers_Accounts
@@ -296,6 +296,46 @@ VALUES
 	(15, 15);
 
 
+INSERT INTO Employees_Accounts
+	(Employee_ID, Account_ID)
+VALUES
+	(1, 1),
+	(2, 1),
+	(3, 2),
+	(4, 2),
+	(5, 3),
+	(6, 4),
+	(7, 5),
+	(8, 5),
+	(9, 5),
+	(10, 6),
+	(10, 7),
+	(11, 8),
+	(12, 9),
+	(13, 9),
+	(14, 10),
+	(15, 10),
+	(16, 9),
+	(17, 8),
+	(18, 7),
+	(19, 6),
+	(20, 6),
+	(21,5),
+	(22, 4),
+	(23, 3),
+	(24, 2),
+	(25, 1),
+	(26, 2),
+	(27, 4),
+	(28, 2),
+	(29, 4),
+	(30, 5),
+	(31, 5),
+	(32, 3),
+	(33, 3),
+	(34, 4),
+	(35, 5);
+	
 INSERT INTO Transfers
 	(Account_ID, Amount, Transfer_Date)
 VALUES
@@ -312,4 +352,5 @@ VALUES
 -- Select * from Account_Types;
 -- Select * from Accounts;
 -- Select * from Customers_Accounts;
+-- Select * from Employees_Accounts;
 -- Select * from Transfers;
