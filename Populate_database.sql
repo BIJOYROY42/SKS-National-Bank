@@ -1,3 +1,5 @@
+-- Patrick MacDonald, Jansen Agcaoili, Bijoy Roy, Ethan Pelletier
+
 -- Sample Data
 
 USE SKS_National_Bank

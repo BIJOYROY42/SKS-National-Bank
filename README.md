@@ -10,14 +10,14 @@
 This project is to simulate being a database administrator setting up and serving a customer's business needs of a database in two phases. 
 
 # Phase 1
-## Requierments
+## Requirements
 - ERD diagram with specifics about the project that matches the final schema
 - Script to create database and tables
 - Sample data script to fill the database with sample information
 - Ten stored procedures to help with database operations
 
   # Phase 2
-  ## Requierments
+  ## Requirements
   > NOTE
   > Coming Soon.
 
