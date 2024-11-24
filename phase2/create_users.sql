@@ -21,7 +21,10 @@ GRANT SELECT ON Transfers TO customer_group_A;
 GRANT SELECT ON Address TO customer_group_A;  
 GRANT SELECT ON Employees_Accounts TO customer_group_A;
 -- GRANT SELECT ON Account_Types TO customer_group_A;
-
+GO
+-- Remove the public role from the customer_group_A user
+EXEC sp_droprolemember 'public', 'customer_group_A';
+GO
 -- Query to check the user and their permissions
 SELECT 
     princ.name AS user_name,
@@ -40,5 +43,14 @@ JOIN
 WHERE 
     princ.name = 'customer_group_A';
 
+select * from  Address;
+select * from Bank_Employees;
+UPDATE Address SET City_Name = 'Toronto' WHERE Address_ID = 1;
 
+-- Create a login and user named “accountant_group_[?]” where [?] is your
+-- group letter. (For example, “accountant_group_B”.)
+-- Their password should be “accountant”.
+-- Their user account should be able to read all tables.
+-- Their user account should not be able to update tables that are related
+-- to accounts, payments and loans, based on your ERD.
 
