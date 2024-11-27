@@ -23,6 +23,21 @@ GO
 CREATE CLUSTERED INDEX Added_Facilities_Facility_Name_CLI
 ON Facilities (Facility_Name);
 GO
+--                         -----------------------
+-- Check if the clustered index exists on Facilities
+-- IF EXISTS (SELECT name 
+--            FROM sys.indexes 
+--            WHERE object_id = OBJECT_ID('Facilities') 
+--            AND name = 'Added_Facilities_Facility_Name_CLI')
+-- BEGIN
+--     PRINT 'Clustered index exists on Facilities.'
+-- END
+-- ELSE
+-- BEGIN
+--     PRINT 'Clustered index does not exist on Facilities.'
+-- END;
+
+-- EXEC sp_helpindex 'Facilities';
 
 ----------------------------------------------------------------------------------------------------------------------------
 --  Replace default clustered index of any table with a new composite clustered index
@@ -65,7 +80,7 @@ GO
 -- EXEC sp_helpindex 'Account_Types';
 
 ----------------------------------------------------------------------------------------------------------------------------
-
+-- Create a composite non-clustered index for any table 
 
 
 
