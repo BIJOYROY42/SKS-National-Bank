@@ -1,7 +1,14 @@
 -- Patrick MacDonald, Jansen Agcaoili, Bijoy Roy, Ethan Pelletier
 USE master
 GO
-
+GO
+-- Terminate connections to the BVC_Portal database
+ALTER DATABASE SKS_National_Bank
+SET
+    SINGLE_USER
+WITH
+ROLLBACK IMMEDIATE;
+GO
 IF EXISTS (SELECT name
 FROM sys.databases
 WHERE name = 'SKS_National_Bank')
@@ -81,7 +88,7 @@ CREATE TABLE Accounts
 	Account_Type_ID INT NOT NULL,
 	Facility_ID INT NOT NULL,
 	Balance money NOT NULL,
-	Data_Last_transaction DATE NOT NULL,
+	Date_Last_transaction DATE NOT NULL,
 	Check_Number INT,
 	Interest_rate DECIMAL(5,2),
 	FOREIGN KEY (Account_Type_ID) REFERENCES Account_Types(Account_Type_ID) ON DELETE CASCADE,
