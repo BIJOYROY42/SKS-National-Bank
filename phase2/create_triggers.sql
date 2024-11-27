@@ -71,26 +71,25 @@ END;
 
 
 GO
--- -- Query to test the trigger
-BEGIN TRANSACTION;
+-- Query to test the trigger
+-- BEGIN TRANSACTION;
 
-INSERT INTO
-    Accounts (
-        Account_Type_ID,
-        Facility_ID,
-        Balance,
-        Date_Last_Transaction
-    )
-VALUES (2, 1, 100, GETDATE ());
+-- INSERT INTO
+--     Accounts (
+--         Account_Type_ID,
+--         Facility_ID,
+--         Balance,
+--         Date_Last_Transaction
+--     )
+-- VALUES (2, 1, 100, GETDATE ());
 
-INSERT INTO
-    Customers_Accounts (Customer_ID, Account_ID)
-VALUES (1, SCOPE_IDENTITY ());
+-- INSERT INTO
+--     Customers_Accounts (Customer_ID, Account_ID)
+-- VALUES (1, SCOPE_IDENTITY ());
 
-COMMIT TRANSACTION;
+-- COMMIT TRANSACTION;
 
-SELECT * FROM Audit;
+-- SELECT * FROM Audit;
 
-SELECT * FROM Accounts;
-SELECT * FROM Customers_Accounts;
-GO
+-- SELECT * FROM Accounts;
+-- SELECT * FROM Customers_Accounts;

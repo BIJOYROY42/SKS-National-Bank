@@ -39,7 +39,7 @@ CREATE TABLE Facilities
 	Facility_ID INT IDENTITY PRIMARY KEY,
 	Address_ID INT NOT NULL,
 	Is_Branch BIT NOT NULL,
-	--Can store 0 or 1 acts as BOOLe
+	--Can store 0 or 1 acts as BOOL
 	Facility_Name VARCHAR(75) UNIQUE,
 	FOREIGN KEY (Address_ID) REFERENCES Address(address_ID) ON DELETE CASCADE
 );
@@ -59,7 +59,7 @@ CREATE TABLE Bank_Employees
 	Employee_ID INT IDENTITY PRIMARY KEY,
 	Employee_Address_ID INT NOT NULL,
 	Role VARCHAR(150)NOT NULL,
-	-- The Manager_ID column is an integer that cannot be null.
+	-- The Manager_ID column is an integer that be null.
 	-- It references the ID of the manager from the same table,
 	-- indicating the employee's manager.
 	Manager_ID INT,
@@ -73,26 +73,27 @@ CREATE TABLE Facilities_Employees
 (
 	Facility_ID INT NOT NULL,
 	Employee_ID INT NOT NULL,
-	FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE CASCADE
+	CONSTRAINT FK_Facilities_Employees_Facility_ID FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Account_Types
 (
 	Account_Type_ID INT IDENTITY PRIMARY KEY,
 	Account_Type_Name VARCHAR(50) NOT NULL
+	
 );
 
 CREATE TABLE Accounts
 (
-	Account_ID INT IDENTITY PRIMARY KEY,
+	Account_ID INT IDENTITY CONSTRAINT PK_Account_ID PRIMARY KEY,
 	Account_Type_ID INT NOT NULL,
 	Facility_ID INT NOT NULL,
 	Balance money NOT NULL,
 	Date_Last_transaction DATE NOT NULL,
 	Check_Number INT,
 	Interest_rate DECIMAL(5,2),
-	FOREIGN KEY (Account_Type_ID) REFERENCES Account_Types(Account_Type_ID) ON DELETE CASCADE,
-	FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE CASCADE
+	CONSTRAINT FK_Accounts_Account_Type_ID FOREIGN KEY (Account_Type_ID) REFERENCES Account_Types(Account_Type_ID) ON DELETE CASCADE,
+	CONSTRAINT FK_Facility_Facility_ID FOREIGN KEY (Facility_ID) REFERENCES Facilities(Facility_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Customers_Accounts
@@ -100,7 +101,7 @@ CREATE TABLE Customers_Accounts
 	Customer_ID INT NOT NULL,
 	Account_ID INT NOT NULL,
 	FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID) ON DELETE NO ACTION,
-	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
+	CONSTRAINT FK_Customers_Accounts_Account_ID FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
 	PRIMARY KEY (Customer_ID, Account_ID)
 );
 
@@ -109,7 +110,7 @@ CREATE TABLE Employees_Accounts
 	Employee_ID INT NOT NULL,
 	Account_ID INT NOT NULL,
 	FOREIGN KEY (Employee_ID) REFERENCES Bank_Employees(Employee_ID) ON DELETE NO ACTION,
-	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
+	CONSTRAINT FK_Employees_Accounts_Account_ID FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE,
 	PRIMARY KEY (Employee_ID, Account_ID)
 );
 
@@ -119,5 +120,5 @@ CREATE TABLE Transfers
 	Account_ID INT NOT NULL,
 	Amount money NOT NULL,
 	Transfer_Date DATE NOT NULL,
-	FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE
+	CONSTRAINT FK_Transfers_Account_ID FOREIGN KEY (Account_ID) REFERENCES Accounts(Account_ID) ON DELETE CASCADE
 );
