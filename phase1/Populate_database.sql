@@ -258,7 +258,7 @@ VALUES
 	('Loan');
 
 INSERT INTO Accounts
-	(Account_Type_ID, Facility_ID, Balance, Data_Last_transaction, Check_Number, Interest_rate)
+	(Account_Type_ID, Facility_ID, Balance, Date_Last_transaction, Check_Number, Interest_rate)
 VALUES
 	(1, 1, 1000.00, '2023-01-01', 1001, 0.01),
 	(1, 2, 1500.00, '2023-02-01', 1002, 0.01),
@@ -270,11 +270,11 @@ VALUES
 	(2, 3, 7000.00, '2023-03-01', NULL, 0.02),
 	(2, 4, 8000.00, '2023-04-01', NULL, 0.02),
 	(2, 4, 9000.00, '2023-05-01', NULL, 0.02),
-	(3, 1, 10000.00, '2023-01-01', NULL, 0.05),
-	(3, 2, 15000.00, '2023-02-01', NULL, 0.05),
-	(3, 3, 20000.00, '2023-03-01', NULL, 0.05),
-	(3, 4, 25000.00, '2023-04-01', NULL, 0.05),
-	(3, 4, 30000.00, '2023-05-01', NULL, 0.05);
+	(3, 1, -10000.00, '2023-01-01', NULL, 0.05),
+	(3, 2, -15000.00, '2023-02-01', NULL, 0.05),
+	(3, 3, -20000.00, '2023-03-01', NULL, 0.05),
+	(3, 4, -25000.00, '2023-04-01', NULL, 0.05),
+	(3, 4, -30000.00, '2023-05-01', NULL, 0.05);
 
 
 INSERT INTO Customers_Accounts
