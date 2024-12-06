@@ -18,8 +18,12 @@ This project is to simulate being a database administrator setting up and servin
 
   # Phase 2
   ## Requirements
-  > NOTE
-  > Coming Soon.
+  -Create two users types with specific privileges.
+  -Implement audit logging with required triggers.
+  -Create three new index types.
+  -JSON and Spatial Data integration
+  -Full database backup(.bak file) Users and Privileges:
+
 
 # Usage
 Simply run our schema file to populate the database, currently we are creating the sample data so this is just an outline of the database.
